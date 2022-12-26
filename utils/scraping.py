@@ -85,8 +85,8 @@ def anime_info(href) -> tuple[Anime, str, str, list[str], list[str]]:
     soup = BeautifulSoup(page.content, 'lxml')
 
     title = soup.find('h1', class_=['title-name']).strong.text
-    for rex in ['lazyloaded', 'lazyload']:
-        image = soup.find('img', class_=rex)
+    for rex in [' lazyloaded', 'lazyload']:
+        image = soup.find('img', class_=rex, itemprop='image')
         if image:
             image = image['data-src']
             break
@@ -94,7 +94,15 @@ def anime_info(href) -> tuple[Anime, str, str, list[str], list[str]]:
     score = soup.find('div', class_=['score-label']).text
     rank = soup.find('span', class_='numbers ranked').strong.text.replace('#', '')
     popularity = soup.find('span', class_='numbers popularity').strong.text.replace('#', '')
-    type = soup.find('span', text=re.compile('Type:')).find_next('a').text
+    type = soup.find('span', text=re.compile('Type:')).parent
+
+    children_type = type.findChildren('a', recursive=False)
+
+    if children_type:
+        type = children_type[0].text
+    else:
+        type = soup.find('span', text=re.compile('Type:')).next_sibling.text.strip()
+
     episodes = soup.find('span', text=re.compile('Episodes:')).next_sibling.text.strip()
     status = soup.find('span', text=re.compile('Status:')).next_sibling.text.strip()
     studios = soup.find('span', text=re.compile('Studios:')).parent.find_all('a')
@@ -124,7 +132,7 @@ def get_anime_info() -> tuple[list[Anime], set[str], set[str] | str, set[str] | 
 
     hrefs = get_animes_hrefs()
 
-    with Pool(processes=multiprocessing.cpu_count()*16) as pool, tqdm.tqdm(total=len(hrefs)) as pbar:
+    with Pool(processes=multiprocessing.cpu_count()*8) as pool, tqdm.tqdm(total=len(hrefs)) as pbar:
         animes = []
         types_ = set()
         status_ = set()

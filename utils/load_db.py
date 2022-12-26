@@ -33,22 +33,12 @@ def load():
     for anime in tqdm.tqdm(animes):
         animes_.append(save_anime(anime))
 
-
     models.Anime.objects.bulk_create(animes_)
 
-
-    animes_update = []
-
     for anime in tqdm.tqdm(animes):
-        animes_update.append(complete_anime_info(anime))
+        complete_anime_info(anime)
 
     # models.Anime.objects.bulk_update(animes_update, ['studios', 'genres'])
-    AnimeStudioRelation = models.Anime.studios.through
-    AnimeGenreRelation = models.Anime.genres.through
-
-    AnimeStudioRelation.objects.bulk_create([AnimeStudioRelation(anime_id=anime.id, studio_id=studio.id) for anime in animes_update for studio in anime.studios.all()])
-    AnimeGenreRelation.objects.bulk_create([AnimeGenreRelation(anime_id=anime.id, genre_id=genre.id) for anime in animes_update for genre in anime.genres.all()])
-
 
 
 def save_anime(anime: scraping.Anime):
@@ -63,7 +53,7 @@ def save_anime(anime: scraping.Anime):
 
 
 def complete_anime_info(anime: scraping.Anime):
-    a = models.Anime.objects.get(rank=anime.rank)
+    a = models.Anime.objects.get(title=anime.title, rank=anime.rank)
 
     studios = models.Studio.objects.filter(name__in=anime.studios)
     genres = models.Genre.objects.filter(name__in=anime.genres)
@@ -71,7 +61,7 @@ def complete_anime_info(anime: scraping.Anime):
     a.studios.set(studios)
     a.genres.set(genres)
 
-    return a
+    a.save()
 
 
 def delete_all():

@@ -17,18 +17,33 @@ class Anime(models.Model):
     studios = models.ManyToManyField('Studio')
     genres = models.ManyToManyField('Genre')
 
+    def __str__(self):
+        return self.title
+
 
 class Type(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class Status(models.Model):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Studio(models.Model):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
