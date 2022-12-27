@@ -1,15 +1,33 @@
 from django.contrib import auth, messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from main import models
 
 
-# Create your views here.
+NUM_ANIMES_PER_PAGE = 36
 
 def index(request):
-    return render(request, 'index.html')
+
+    animes = models.Anime.objects.all().order_by('rank')
+
+    paginator = Paginator(animes, NUM_ANIMES_PER_PAGE)
+
+    if 'page' in request.GET:
+        page_number = request.GET.get('page')
+    else:
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
+
+    print([i for i in range(1, page_obj.paginator.num_pages + 1)])
+
+    return render(request, 'index.html', {'animes': page_obj,
+                                          'max_pages': [i for i in range(1, page_obj.paginator.num_pages + 1)]})
+
 
 
 def register(request):

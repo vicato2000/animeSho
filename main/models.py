@@ -17,6 +17,9 @@ class Anime(models.Model):
     studios = models.ManyToManyField('Studio')
     genres = models.ManyToManyField('Genre')
 
+    def get_synopsis_limit(self):
+        return self.synopsis[:100] + '...'
+
     def __str__(self):
         return self.title
 

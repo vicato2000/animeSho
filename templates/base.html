@@ -10,13 +10,17 @@
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
     <script src="{% static 'javascript/base.js' %}"></script>
+
+    {% block extrahead %}
+    {% endblock %}
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav id="navbar-top" class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark ">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'index' %}">AnimeSho</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -31,10 +35,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
+                        Acciones
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Cargar la base de datos</a></li>
                         <li><a class="dropdown-item" href="#">Another action</a></li>
                         <li>
                             <hr class="dropdown-divider">
@@ -73,6 +77,8 @@
         </div>
     </div>
 </nav>
+
+
 
 
 {% if messages %}
@@ -127,7 +133,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="registerForm" method="post" action="{% url 'register' %}" onsubmit="return validateRegisterForm()">
+                <form id="registerForm" method="post" action="{% url 'register' %}"
+                      onsubmit="return validateRegisterForm()">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="inputEmail" class="form-label">Email</label>
