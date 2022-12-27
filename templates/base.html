@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
+    <script src="{% static 'javascript/base.js' %}"></script>
 </head>
 <body>
 
@@ -55,6 +57,7 @@
             <div class="d-flex">
 
                 {% if user.is_authenticated %}
+                    <a class="btn btn-light me-2" href="#">{{ user.username }}</a>
                     <a class="btn btn-outline-light" href="{% url 'logout' %}">Logout</a>
                 {% else %}
                     <button class="btn btn-outline-light me-2" type="button" data-bs-toggle="modal"
@@ -71,12 +74,19 @@
     </div>
 </nav>
 
-{% if error %}
 
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
+{% if messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-
 {% endif %}
 
 
@@ -90,10 +100,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{% url 'login' %}" method="POST">
+                <form action="{% url 'login' %}" method="POST" id="loginForm" onsubmit="return validateLoginForm()">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="inputUsername" class="form-label">Email</label>
+                        <label for="inputUsername" class="form-label">Username</label>
                         <input type="text" name="username" class="form-control" id="inputUsername"
                                aria-describedby="usernameHelp" required>
                     </div>
@@ -117,27 +127,48 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="registerForm" method="post" action="{% url 'register' %}" onsubmit="return validateRegisterForm()">
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label for="inputEmail" class="form-label">Email</label>
                         <input type="email" name="email" class="form-control" id="inputEmail"
-                               aria-describedby="emailHelp" required>
+                               aria-describedby="emailHelp"
+                                {% if are_errors %} value="{{ email }}" {% endif %}
+                               required>
+                        <div class="invalid-feedback" id="invalidEmail"></div>
                     </div>
                     <div class="mb-3">
                         <label for="inputPassword" class="form-label">Contraseña</label>
-                        <input type="password" name="password" class="form-control" id="inputPassword" required>
+                        <input type="password" name="password" class="form-control" id="inputPassword"
+                               minlength="8" required>
+                        <div class="invalid-feedback" id="invalidContraseña"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPassword2" class="form-label">Repita contraseña</label>
+                        <input type="password" name="password2" class="form-control" id="inputPassword2"
+                               minlength="8" required>
+                        <div class="invalid-feedback" id="invalidContraseña"></div>
                     </div>
                     <div class="mb-3">
                         <label for="inputUsername" class="form-label">Nombre de usuario</label>
-                        <input type="text" name="username" class="form-control" id="inputUsername" required>
+                        <input type="text" name="username" class="form-control" id="inputUsername"
+                                {% if are_errors %} value="{{ username }}" {% endif %}
+                               required>
+                        <div class="invalid-feedback" id="invalidUsername"></div>
                     </div>
                     <div class="mb-3">
                         <label for="inputFirstName" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="inputFirstName" required>
+                        <input type="text" name="first_name" class="form-control" id="inputFirstName"
+                                {% if are_errors %} value="{{ first_name }}" {% endif %}
+                               required>
+                        <div class="invalid-feedback" id="invalidFirstName"></div>
                     </div>
                     <div class="mb-3">
                         <label for="inputLastName" class="form-label">Apellido(s)</label>
-                        <input type="text" class="form-control" id="inputLastName" required>
+                        <input type="text" name="last_name" class="form-control" id="inputLastName"
+                                {% if are_errors %} value="last_name" {% endif %}
+                               required>
+                        <div class="invalid-feedback" id="invalidLastName"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -146,6 +177,29 @@
         </div>
     </div>
 </div>
+
+{% block content %}
+
+{% endblock %}
+
+<script>
+
+
+    function main() {
+
+        let error_bool = '{{ are_errors }}';
+
+
+        if (error_bool === "True") {
+            document.getElementById("register-modal").ariaHidden = 'false';
+            document.getElementById("register-modal").style.display = 'block';
+            document.getElementById("register-modal").className = 'modal fade show';
+        }
+
+    }
+
+    document.addEventListener("DOMContentLoaded", main);
+</script>
 
 
 </body>
