@@ -9,6 +9,49 @@
 
 
 {% block content %}
+    <div class="collapse" id="navbarToggleExternalContent">
+        <div class="row bg-dark justify-content-center">
+            <div class="col">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Ranking
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'index' %}?order=rank">Ascendente</a></li>
+                        <li><a class="dropdown-item" href="{% url 'index' %}?order=-rank">Descendente</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Popularidad
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'index' %}?order=popularity">Ascendente</a></li>
+                        <li><a class="dropdown-item" href="{% url 'index' %}?order=-popularity">Descendente</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Puntuación
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'index' %}?order=score">Ascendente</a></li>
+                        <li><a class="dropdown-item" href="{% url 'index' %}?order=-score">Descendente</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <div class="container">
 
@@ -17,7 +60,7 @@
             {% for anime in animes %}
 
                 <div class="col-sm">
-                    <div class="card mb-3" style="max-width: 540px;">
+                    <div class="card mb-3" style="max-width: 580px;">
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="{{ anime.image }}" class="img-fluid rounded-start" alt="...">
@@ -44,10 +87,11 @@
         <div class="d-flex justify-content-center">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
-                    <li class="page-item"><a class="page-link"  id="previous-page" href="#">Anterior</a></li>
+                    <li class="page-item"><a class="page-link" id="previous-page" href="#">Anterior</a></li>
 
                     {% for p in max_pages %}
-                        <li class="page-item"><a class="page-link" href="{% url 'index' %}?page={{ p }}">{{ p }}</a></li>
+                        <li class="page-item"><a class="page-link" href="{% url 'index' %}?page={{ p }}">{{ p }}</a>
+                        </li>
                     {% endfor %}
                     <li class="page-item"><a class="page-link" id="nex-page" href="#">Next</a></li>
                 </ul>
@@ -58,41 +102,54 @@
 
     <script>
 
-    function get_page() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
+        function get_page() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const page = urlParams.get('page');
 
-        if (page == null) {
-            return 1;
+            if (page == null) {
+                return 1;
+            }
+
+            return page;
         }
 
-        return page;
-    }
+        function pagination() {
+            const page = get_page();
+            const previous_page = document.getElementById('previous-page');
+            const next_page = document.getElementById('nex-page');
 
-    function previus_next_page() {
-        const page = get_page();
-        const previous_page = document.getElementById('previous-page');
-        const next_page = document.getElementById('nex-page');
+            let order = '';
 
-        if (page == 1) {
-            previous_page.setAttribute('href', '{% url 'index' %}');
-        } else {
-            previous_page.setAttribute('href', '{% url 'index' %}?page=' + (page - 1));
+            if (window.location.search.includes('order')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                order = '&order=' + urlParams.get('order');
+            }
+
+            if (page == 1) {
+                previous_page.setAttribute('href', '{% url 'index' %}' + '?' + order);
+            } else {
+                previous_page.setAttribute('href', '{% url 'index' %}?page=' + (page - 1) + order);
+            }
+
+            const max_pages = {{ max_pages|length }};
+
+            if (page == max_pages) {
+                next_page.setAttribute('href', '{% url 'index' %}?page=' + max_pages + '?' + order);
+            } else {
+                next_page.setAttribute('href', '{% url 'index' %}?page=' + (parseInt(page) + 1) + order);
+            }
+
+            let numbers_pages = document.getElementsByClassName('page-link');
+
+            for (let i = 0; i < numbers_pages.length; i++) {
+                numbers_pages[i].setAttribute('href', numbers_pages[i].getAttribute('href') + order);
+            }
+
         }
 
-        const max_pages = {{ max_pages|length }};
-
-        if (page == max_pages) {
-            next_page.setAttribute('href', '{% url 'index' %}?page=' + max_pages);
-        } else {
-            next_page.setAttribute('href', '{% url 'index' %}?page=' + (parseInt(page) + 1));
-        }
-
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        previus_next_page();
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            pagination();
+        });
 
     </script>
 

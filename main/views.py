@@ -7,12 +7,14 @@ from django.shortcuts import render
 from django.urls import reverse
 from main import models
 
-
 NUM_ANIMES_PER_PAGE = 36
 
-def index(request):
 
-    animes = models.Anime.objects.all().order_by('rank')
+def index(request):
+    if 'order' in request.GET:
+        animes = models.Anime.objects.order_by(request.GET.get('order'))
+    else:
+        animes = models.Anime.objects.all().order_by('rank')
 
     paginator = Paginator(animes, NUM_ANIMES_PER_PAGE)
 
@@ -23,11 +25,9 @@ def index(request):
 
     page_obj = paginator.get_page(page_number)
 
-    print([i for i in range(1, page_obj.paginator.num_pages + 1)])
-
     return render(request, 'index.html', {'animes': page_obj,
-                                          'max_pages': [i for i in range(1, page_obj.paginator.num_pages + 1)]})
-
+                                          'max_pages': [i for i in range(1, page_obj.paginator.num_pages + 1)],
+                                          'filtros': True})
 
 
 def register(request):
@@ -38,7 +38,7 @@ def register(request):
     email = request.POST['email']
 
     errors = []
-    if username == " " or password == " " or first_name == " " or last_name == " " or email == " ":  # Check if any field is empty
+    if username == " " or password == " " or first_name == " " or last_name == " " or email == " ":
         empty = "Todos los campos del formulario deben estar rellenos"
         errors.append(empty)
     if first_name[0].islower():

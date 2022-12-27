@@ -46,6 +46,18 @@
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </li>
+
+                {% if filtros %}
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-outline-light" data-bs-toggle="collapse"
+                                data-bs-target="#navbarToggleExternalContent"
+                                aria-controls="navbarToggleExternalContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span>Filtros</span>
+                        </button>
+                    </li>
+                {% endif %}
+
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
