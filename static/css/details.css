@@ -1,0 +1,65 @@
+.anime-description{
+
+    display: flex;
+    flex-direction: column;
+
+    height: 300px;
+
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.anime-title{
+    font-weight: bold;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.anime-puntuation{
+    font-weight: initial;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.anime-episodes{
+    font-weight: initial;
+    font-size: 20px;
+    display: flex;
+    justify-content: initial;
+    align-items: center;
+    margin-left: 2%;
+}
+
+.anime-synopsis{
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+.anime-synopsis-title{
+    font-weight: bold;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.anime-synopsis-text{
+    font-weight: initial;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

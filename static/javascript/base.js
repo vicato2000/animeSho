@@ -42,8 +42,44 @@ function validateRegisterForm() {
 
 }
 
-document.addEventListener("DOMContentLoaded", function(){
-    window.addEventListener('scroll', function() {
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+async function loadAnimes() {
+
+    let dialog = confirm("¿Desea cargar los animes? Este procesa tarda entre 1 y 5 minutos dependiendo de la conexión a internet");
+
+    if (dialog) {
+
+        document.getElementById("load-modal").ariaHidden = 'false';
+        document.getElementById("load-modal").style.display = 'block';
+        document.getElementById("load-modal").className = 'modal fade show';
+
+        const response = await fetch('/load/',
+            {
+                method: 'GET',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+
+            });
+
+
+        if (response.ok) {
+            alert("Los animes se han cargado correctamente");
+            window.location.href = '';
+        } else {
+            alert("Error al cargar los animes");
+            window.location.href = '';
+        }
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    window.addEventListener('scroll', function () {
         let navbar_height;
         if (window.scrollY > 50) {
             document.getElementById('navbar-top').classList.add('fixed-top');
@@ -57,3 +93,6 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
 });
+
+
+

@@ -16,6 +16,8 @@ class Anime(models.Model):
     status = models.ForeignKey('Status', on_delete=models.CASCADE)
     studios = models.ManyToManyField('Studio')
     genres = models.ManyToManyField('Genre')
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(null=True)
 
     def get_synopsis_limit(self):
         return self.synopsis[:100] + '...'

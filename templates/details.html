@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+
+    <link rel="stylesheet" href="{% static 'css/details.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+    <div class="row row-cols-1 row-cols-sm-2 g-2 g-lg-3 mt-3">
+
+        <div class="col col-sm-3">
+            <div class="image">
+
+                <img src="{{ anime.image }}" class="img-fluid" alt="Responsive image" width="282px" height="477px">
+
+            </div>
+        </div>
+
+        <div class="col mx-auto">
+            <div class="anime-description">
+                <p class="anime-title">{{ anime.title }}</p>
+                <p class="anime-puntuation">Score {{ anime.score }}  &emsp;  Rank <a href="{% url 'index' %}?order=rank"> {{ anime.rank }}#</a>  &emsp; Popularity <a href="{% url 'index' %}?order=-popularity">{{ anime.popularity }}#</a></p>
+                <p class="anime-episodes">Episodes: {{ anime.episodes }} &emsp; Type: {{ anime.type }} &emsp; Status: {{ anime.status }}</p>
+                <p class="anime-genres">Genres: {% for genre in anime.genres.all %} <a href="{% url 'index' %}?genre={{ genre.id }}">{{ genre.name }}</a> {% if not forloop.last %} | {% endif %} {% endfor %}</p>
+                <p class="anime-studios">Studios: {% for studio in anime.studios.all %} <a href="{% url 'index' %}?studio={{ studio.id }}">{{ studio.name }}</a> {% if not forloop.last %} | {% endif %} {% endfor %}</p>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <div class="anime-synopsis">
+                <p class="anime-synopsis-title">Synopsis</p>
+                <p class="anime-synopsis-text">{{ anime.synopsis }}</p>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+{% endblock %}

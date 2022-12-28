@@ -10,6 +10,7 @@
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
     <script src="{% static 'javascript/base.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     {% block extrahead %}
     {% endblock %}
@@ -26,52 +27,79 @@
         </button>
         <div class="collapse navbar-collapse mx-auto" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Acciones
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Cargar la base de datos</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
 
-                {% if filtros %}
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-light" data-bs-toggle="collapse"
-                                data-bs-target="#navbarToggleExternalContent"
-                                aria-controls="navbarToggleExternalContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                            <span>Filtros</span>
-                        </button>
+                {% if user.is_authenticated %}
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Acciones
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" onclick=" loadAnimes()" href="#">Cargar la base de datos</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                        </ul>
                     </li>
+
                 {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item justify-content-center">
-                    <form class="d-flex ms-5">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-light" type="submit">Search</button>
-                    </form>
-                </li>
+
+
+                {% if filtros %}
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Filtros
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" >Ranking</a>
+                                <ul class="dropdown-menu dropdown-submenu">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=rank">Ascendente</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=-rank">Descendente</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" >Popularidad</a>
+                                <ul class="dropdown-menu dropdown-submenu">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="{% url 'index' %}?order=popularity">Ascendente</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="{% url 'index' %}?order=-popularity">Descendente</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" >Puntuación</a>
+                                <ul class="dropdown-menu dropdown-submenu">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=score">Ascendente</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=-score">Descendente</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+                <form class="d-flex justify-content-center ms-5">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
             </ul>
 
 
             <div class="d-flex">
-
                 {% if user.is_authenticated %}
                     <a class="btn btn-light me-2" href="#">{{ user.username }}</a>
                     <a class="btn btn-outline-light" href="{% url 'logout' %}">Logout</a>
@@ -193,6 +221,29 @@
                 </form>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="load-modal" tabindex="-1" aria-labelledby="loadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="center">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

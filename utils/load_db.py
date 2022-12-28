@@ -2,8 +2,7 @@ import tqdm
 
 from utils import scraping
 from main import models
-from multiprocessing import Pool
-import multiprocessing
+import datetime
 
 
 def load():
@@ -25,11 +24,6 @@ def load():
 
     animes_ = []
 
-    # with Pool() as pool, tqdm.tqdm(total=len(animes)) as pbar:
-    #     for anime in pool.imap_unordered(save_anime, animes):
-    #         animes.append(anime)
-    #         pbar.update()
-
     for anime in tqdm.tqdm(animes):
         animes_.append(save_anime(anime))
 
@@ -38,16 +32,16 @@ def load():
     for anime in tqdm.tqdm(animes):
         complete_anime_info(anime)
 
-    # models.Anime.objects.bulk_update(animes_update, ['studios', 'genres'])
-
 
 def save_anime(anime: scraping.Anime):
     type = models.Type.objects.get(name=anime.type)
     status = models.Status.objects.get(name=anime.status)
 
+    date_start, date_end = parse_date(anime.date_start), parse_date(anime.date_end)
+
     anime = models.Anime(title=anime.title, image=anime.image, synopsis=anime.synopsis, score=anime.score,
                          rank=anime.rank, popularity=anime.popularity, episodes=anime.episodes, type=type,
-                         status=status)
+                         status=status, date_start=date_start, date_end=date_end)
 
     return anime
 
@@ -70,6 +64,17 @@ def delete_all():
     models.Status.objects.all().delete()
     models.Studio.objects.all().delete()
     models.Genre.objects.all().delete()
+
+
+def parse_date(date: str):
+    if date == '?':
+        return None
+    else:
+
+        try:
+            return datetime.datetime.strptime(date, '%b %d, %Y').date()
+        except ValueError:
+            return datetime.datetime.strptime(date, '%b %Y').date()
 
 
 if __name__ == '__main__':

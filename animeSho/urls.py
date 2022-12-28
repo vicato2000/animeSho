@@ -23,4 +23,6 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
+    path('load/', views.load_db_whoosh, name='load'),
+    path('<int:anime_id>/', views.details, name='anime_detail'),
 ]

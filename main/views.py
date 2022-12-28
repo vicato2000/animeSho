@@ -1,11 +1,14 @@
 from django.contrib import auth, messages
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
+from django.db import transaction
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from main import models
+from utils import load_db
 
 NUM_ANIMES_PER_PAGE = 36
 
@@ -28,6 +31,12 @@ def index(request):
     return render(request, 'index.html', {'animes': page_obj,
                                           'max_pages': [i for i in range(1, page_obj.paginator.num_pages + 1)],
                                           'filtros': True})
+
+
+@login_required
+def details(request, anime_id):
+    anime = models.Anime.objects.get(id=anime_id)
+    return render(request, 'details.html', {'anime': anime})
 
 
 def register(request):
@@ -102,3 +111,13 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+
+@login_required
+@transaction.atomic
+def load_db_whoosh(request):
+    try:
+        load_db.load()
+        return HttpResponse(status=200)
+    except:
+        return HttpResponse(status=500)

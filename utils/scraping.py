@@ -42,6 +42,8 @@ class Anime:
     status: str
     studios: list[str]
     genres: list[str]
+    date_start: str
+    date_end: str
 
     def __str__(self):
         return f'{self.title} - {self.score} - {self.rank} - {self.popularity} - {self.type} - {self.episodes} - {self.status} - {self.studios} - {self.genres}'
@@ -103,6 +105,10 @@ def anime_info(href) -> tuple[Anime, str, str, list[str], list[str]]:
     else:
         type = soup.find('span', text=re.compile('Type:')).next_sibling.text.strip()
 
+    date = soup.find('span', text=re.compile('Aired:')).next_sibling.text.strip()
+    date_start = date.split(' to ')[0].strip()
+    date_end = date.split(' to ')[1].strip() if 'to' in date else '?'
+
     episodes = soup.find('span', text=re.compile('Episodes:')).next_sibling.text.strip()
     status = soup.find('span', text=re.compile('Status:')).next_sibling.text.strip()
     studios = soup.find('span', text=re.compile('Studios:')).parent.find_all('a')
@@ -116,7 +122,7 @@ def anime_info(href) -> tuple[Anime, str, str, list[str], list[str]]:
             break
 
     return Anime(title, image, synopsis, float(score), int(rank), int(popularity), type,
-                 0 if episodes == 'Unknown' else int(episodes), status, studios, genres), type, status, studios, genres
+                 0 if episodes == 'Unknown' else int(episodes), status, studios, genres, date_start, date_end), type, status, studios, genres
 
 
 def get_anime_info() -> tuple[list[Anime], set[str], set[str] | str, set[str] | list[str], set[str] | list[str]]:
