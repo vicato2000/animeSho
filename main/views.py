@@ -8,16 +8,37 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from main import models
-from utils import load_db
+from utils import load_db, whoosh
 
 NUM_ANIMES_PER_PAGE = 36
 
 
 def index(request):
-    if 'order' in request.GET:
-        animes = models.Anime.objects.order_by(request.GET.get('order'))
+    if 'search' in request.GET:
+        query = request.GET['search']
+        if query == "":
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            print(query)
+            animes = whoosh.general_search(query)
+            print(animes)
     else:
-        animes = models.Anime.objects.all().order_by('rank')
+        if 'order' in request.GET:
+            animes = models.Anime.objects.order_by(request.GET.get('order'))
+        else:
+            animes = models.Anime.objects.all().order_by('rank')
+
+        if 'genre' in request.GET:
+            animes = animes.filter(genres__name=request.GET.get('genre'))
+
+        if 'studio' in request.GET:
+            animes = animes.filter(studios__name=request.GET.get('studio'))
+
+        if 'status' in request.GET:
+            animes = animes.filter(status__name=request.GET.get('status'))
+
+        if 'type' in request.GET:
+            animes = animes.filter(type__name=request.GET.get('type'))
 
     paginator = Paginator(animes, NUM_ANIMES_PER_PAGE)
 
@@ -28,8 +49,17 @@ def index(request):
 
     page_obj = paginator.get_page(page_number)
 
+    genres = models.Genre.objects.all().order_by('name')
+    studios = models.Studio.objects.all().order_by('name')
+    status = models.Status.objects.all().order_by('name')
+    types = models.Type.objects.all().order_by('name')
+
     return render(request, 'index.html', {'animes': page_obj,
                                           'max_pages': [i for i in range(1, page_obj.paginator.num_pages + 1)],
+                                          'genres': genres,
+                                          'studios': studios,
+                                          'status': status,
+                                          'types': types,
                                           'filtros': True})
 
 

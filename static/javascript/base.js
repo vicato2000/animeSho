@@ -47,6 +47,16 @@ function topFunction() {
     document.documentElement.scrollTop = 0;
 }
 
+function validateSearchForm() {
+    let form = document.getElementById("search-form");
+    let search = form.search.value;
+
+    if (search.trim().length === 0) {
+        alert("No introdujo nada en el campo de búsqueda");
+        return false;
+    }
+}
+
 async function loadAnimes() {
 
     let dialog = confirm("¿Desea cargar los animes? Este procesa tarda entre 1 y 5 minutos dependiendo de la conexión a internet");
@@ -76,6 +86,13 @@ async function loadAnimes() {
         }
     }
 
+}
+
+function formSubmit(formId) {
+    let thisForm = document.getElementById(formId);
+    if (thisForm) {
+        thisForm.submit();
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {

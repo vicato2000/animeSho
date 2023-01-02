@@ -1,8 +1,8 @@
 import tqdm
-
+import datetime
 from utils import scraping
 from main import models
-import datetime
+from utils import whoosh
 
 
 def load():
@@ -31,6 +31,8 @@ def load():
 
     for anime in tqdm.tqdm(animes):
         complete_anime_info(anime)
+
+    whoosh.create_index()
 
 
 def save_anime(anime: scraping.Anime):

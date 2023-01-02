@@ -9,6 +9,58 @@
 
 
 {% block content %}
+
+    <div class="container-fluid">
+
+        <fieldset>
+            <legend class="mt-2">Filters</legend>
+            <div class="row row-cols-1 row-cols-md-3 mt-3">
+                <div class="col">
+                    <select class="form-control" onchange="location = this.value">
+                        <option value="-1">Select Genre</option>
+                        {% for genre in genres %}
+                            <option value="?genre={{ genre.name }}">
+                                {{ genre.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-control" onchange="location = this.value">
+                        <option value="-1">Select Studio</option>
+                        {% for studio in studios %}
+                            <option value="?studio={{ studio.name }}">
+                                {{ studio.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-control" onchange="location = this.value">
+                        <option value="-1">Select Type</option>
+                        {% for type in types %}
+                            <option value="?type={{ type.name }}">
+                                {{ type.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-control" onchange="location = this.value">
+                        <option value="-1">Select Status</option>
+                        {% for statu in status %}
+                            <option value="?status={{ statu.name }}">
+                                {{ statu.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+
+    </div>
+
     <div class="container">
 
         <div class="row row-cols-1 row-cols-sm-3 g-2 g-lg-3 mt-3">
@@ -77,30 +129,49 @@
             const next_page = document.getElementById('nex-page');
 
             let order = '';
+            let genre = '';
+            let type = '';
+            let status = '';
 
             if (window.location.search.includes('order')) {
                 const urlParams = new URLSearchParams(window.location.search);
                 order = '&order=' + urlParams.get('order');
             }
+            if (window.location.search.includes('genre')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                genre = '&genre=' + urlParams.get('genre');
+            }
+
+            if (window.location.search.includes('type')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                type = '&type=' + urlParams.get('type');
+            }
+
+            if (window.location.search.includes('status')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                status = '&status=' + urlParams.get('status');
+            }
+
+            let query = '' + order + genre + type + status;
 
             if (page == 1) {
-                previous_page.setAttribute('href', '{% url 'index' %}' + '?' + order);
+                previous_page.setAttribute('href', '{% url 'index' %}' + '?' + query);
             } else {
-                previous_page.setAttribute('href', '{% url 'index' %}?page=' + (page - 1) + order);
+                previous_page.setAttribute('href', '{% url 'index' %}?page=' + (page - 1) + query);
             }
 
             const max_pages = {{ max_pages|length }};
 
             if (page == max_pages) {
-                next_page.setAttribute('href', '{% url 'index' %}?page=' + max_pages + '?' + order);
+                next_page.setAttribute('href', '{% url 'index' %}?page=' + max_pages + '?' + query);
             } else {
-                next_page.setAttribute('href', '{% url 'index' %}?page=' + (parseInt(page) + 1) + order);
+                next_page.setAttribute('href', '{% url 'index' %}?page=' + (parseInt(page) + 1) + query);
             }
 
             let numbers_pages = document.getElementsByClassName('page-link');
 
             for (let i = 0; i < numbers_pages.length; i++) {
-                numbers_pages[i].setAttribute('href', numbers_pages[i].getAttribute('href') + order);
+                numbers_pages[i].setAttribute('href', numbers_pages[i].getAttribute('href') + query);
             }
 
         }

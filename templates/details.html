@@ -24,10 +24,12 @@
         <div class="col mx-auto">
             <div class="anime-description">
                 <p class="anime-title">{{ anime.title }}</p>
-                <p class="anime-puntuation">Score {{ anime.score }}  &emsp;  Rank <a href="{% url 'index' %}?order=rank"> {{ anime.rank }}#</a>  &emsp; Popularity <a href="{% url 'index' %}?order=-popularity">{{ anime.popularity }}#</a></p>
-                <p class="anime-episodes">Episodes: {{ anime.episodes }} &emsp; Type: {{ anime.type }} &emsp; Status: {{ anime.status }}</p>
-                <p class="anime-genres">Genres: {% for genre in anime.genres.all %} <a href="{% url 'index' %}?genre={{ genre.id }}">{{ genre.name }}</a> {% if not forloop.last %} | {% endif %} {% endfor %}</p>
-                <p class="anime-studios">Studios: {% for studio in anime.studios.all %} <a href="{% url 'index' %}?studio={{ studio.id }}">{{ studio.name }}</a> {% if not forloop.last %} | {% endif %} {% endfor %}</p>
+                <p class="anime-puntuation">Score {{ anime.score }}  &emsp;  Rank <a href="{% url 'index' %}?order=rank"> {{ anime.rank }}#</a>  &emsp; Popularity <a href="{% url 'index' %}?order=popularity">{{ anime.popularity }}#</a></p>
+                <p class="anime-episodes ms-2">Episodes: {{ anime.episodes }} &emsp; Type: {{ anime.type }} &emsp; Status: {{ anime.status }}</p>
+                <p class="anime-genres ms-2">Genres: {% for genre in anime.genres.all %} <a href="{% url 'index' %}?genre={{ genre.name }}">{{ genre.name }}</a> {% if not forloop.last %} | {% endif %} {% endfor %}</p>
+                <p class="anime-studios ms-2">Studios: {% for studio in anime.studios.all %} <a href="{% url 'index' %}?studio={{ studio.name }}">{{ studio.name }}</a> {% if not forloop.last %} | {% endif %} {% endfor %}</p>
+                <p class="anime-dates ms-2">Start date: {% if anime.date_start %} {{ anime.date_start }} {% else %} - {% endif %}</p>
+                <p class="anime-dates ms-2">End date: {% if anime.date_end %} {{ anime.date_end }} {% else %} - {% endif %}</p>
 
             </div>
 
