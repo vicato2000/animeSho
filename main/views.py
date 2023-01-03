@@ -19,9 +19,8 @@ def index(request):
         if query == "":
             return HttpResponseRedirect(reverse('index'))
         else:
-            print(query)
             animes = whoosh.general_search(query)
-            print(animes)
+
     else:
         if 'order' in request.GET:
             animes = models.Anime.objects.order_by(request.GET.get('order'))
@@ -63,7 +62,18 @@ def index(request):
                                           'filtros': True})
 
 
-@login_required
+def custom_search_view(request):
+    if request.GET:
+        return render(request, 'search.html')
+    else:
+        animes = []
+        if 'phrase' in request.POST:
+            phrase = request.POST.get('phrase')
+            animes = whoosh.phrase_search(phrase)
+
+        return render(request, 'search.html', {'animes': animes})
+
+
 def details(request, anime_id):
     anime = models.Anime.objects.get(id=anime_id)
     return render(request, 'details.html', {'anime': anime})

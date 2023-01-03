@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <fieldset class="mt-5">
+            <label>How dou you want search?</label>
+            <div class="form-check">
+                <input value="1" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                       checked onchange="radioButtons(this.value)">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    Phrases in synopsys
+                </label>
+            </div>
+            <div class="form-check">
+                <input value="2" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                       onchange="radioButtons(this.value)">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    Dates
+                </label>
+            </div>
+            <div class="form-check">
+                <input value="3" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                       onchange="radioButtons(this.value)">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    Number of episodes
+                </label>
+            </div>
+        </fieldset>
+
+        <div id="phrases" class="mt-5" style="display: block">
+            <form onsubmit="return validateFormsRadio('1')" method="post" action="{% url 'search' %}">
+                <div class="input-group input-group-lg">
+                    {% csrf_token %}
+                    <span class="input-group-text" id="inputGroup-sizing-lg">Phrase</span>
+                    <input type="text" name="phrase" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </form>
+        </div>
+        <div id="dates" class="mt-5" style="display: none">
+            <form>
+                {% csrf_token %}
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-sizing-lg">Start Date</span>
+                    <input type="date" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-lg">
+                    <span class="input-group-text" id="inputGroup-sizing-lg">End Date</span>
+                    <input type="date" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </form>
+        </div>
+        <div id="episodes" class="mt-5" style="display: none">
+            <form>
+                {% csrf_token %}
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-sizing-lg">Similar or Equals Number of Episodes</span>
+                    <input type="number" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </form>
+        </div>
+
+
+        {% if animes %}
+
+            <div class="row row-cols-1 row-cols-sm-3 g-2 g-lg-3 mt-3">
+
+                {% for anime in animes %}
+
+                    <div class="col-sm">
+                        <div class="card mb-3" style="max-width: 580px;">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <a href="{% url 'anime_detail' anime.id %}">
+                                        <img src="{{ anime.image }}" class="img-fluid rounded-start" alt="...">
+                                    </a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ anime.title }}</h5>
+                                        <p class="card-text">{{ anime.get_synopsis_limit }}</p>
+                                        <p class="card-text">
+                                            <small class="text-muted me-1">Score: {{ anime.score }}</small>
+                                            <small class="text-muted me-1">Rank {{ anime.rank }}#</small>
+                                            <small class="text-muted">Popularity {{ anime.popularity }}#</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+{% endblock %}

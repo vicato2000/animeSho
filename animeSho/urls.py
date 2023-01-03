@@ -25,4 +25,5 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('load/', views.load_db_whoosh, name='load'),
     path('<int:anime_id>/', views.details, name='anime_detail'),
+    path('search/', views.custom_search_view, name='search'),
 ]

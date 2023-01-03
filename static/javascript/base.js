@@ -47,6 +47,36 @@ function topFunction() {
     document.documentElement.scrollTop = 0;
 }
 
+function radioButtons(value){
+    if (value === "1"){
+        document.getElementById("phrases").style.display = "block";
+        document.getElementById("dates").style.display = "none";
+        document.getElementById("episodes").style.display = "none";
+    } else if (value === "2"){
+        document.getElementById("phrases").style.display = "none";
+        document.getElementById("dates").style.display = "block";
+        document.getElementById("episodes").style.display = "none";
+    }
+    else if (value === "3"){
+        document.getElementById("phrases").style.display = "none";
+        document.getElementById("dates").style.display = "none";
+        document.getElementById("episodes").style.display = "block";
+    }
+
+}
+
+function validateFormsRadio(value){
+    if (value === "1"){
+        const form = document.getElementById("phrases").getElementsByTagName("form")[0];
+        let phrase = form.phrase.value;
+
+        if (phrase.trim().length === 0) {
+            alert("No introdujo frase");
+            return false;
+        }
+    }
+}
+
 function validateSearchForm() {
     let form = document.getElementById("search-form");
     let search = form.search.value;

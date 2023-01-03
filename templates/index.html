@@ -14,9 +14,9 @@
 
         <fieldset>
             <legend class="mt-2">Filters</legend>
-            <div class="row row-cols-1 row-cols-md-3 mt-3">
+            <div class="row row-cols-1 row-cols-md-4 mt-3">
                 <div class="col">
-                    <select class="form-control" onchange="location = this.value">
+                    <select class="form-select" onchange="location = this.value">
                         <option value="-1">Select Genre</option>
                         {% for genre in genres %}
                             <option value="?genre={{ genre.name }}">
@@ -26,7 +26,7 @@
                     </select>
                 </div>
                 <div class="col">
-                    <select class="form-control" onchange="location = this.value">
+                    <select class="form-select" onchange="location = this.value">
                         <option value="-1">Select Studio</option>
                         {% for studio in studios %}
                             <option value="?studio={{ studio.name }}">
@@ -36,7 +36,7 @@
                     </select>
                 </div>
                 <div class="col">
-                    <select class="form-control" onchange="location = this.value">
+                    <select class="form-select" onchange="location = this.value">
                         <option value="-1">Select Type</option>
                         {% for type in types %}
                             <option value="?type={{ type.name }}">
@@ -46,7 +46,7 @@
                     </select>
                 </div>
                 <div class="col">
-                    <select class="form-control" onchange="location = this.value">
+                    <select class="form-select" onchange="location = this.value">
                         <option value="-1">Select Status</option>
                         {% for statu in status %}
                             <option value="?status={{ statu.name }}">
