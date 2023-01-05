@@ -89,6 +89,17 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li>
+                                <a class="dropdown-item">Episodes</a>
+                                <ul class="dropdown-menu dropdown-submenu">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=episodes">Ascendente</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=-episodes">Descendente</a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                 {% endif %}

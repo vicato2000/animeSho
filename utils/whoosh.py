@@ -1,13 +1,14 @@
 import os
 import shutil
 
-from whoosh.fields import Schema, TEXT, NUMERIC, KEYWORD, DATETIME, ID
+from whoosh.fields import Schema, TEXT, NUMERIC, KEYWORD, DATETIME
 from whoosh.index import create_in, open_dir
-from whoosh.qparser import MultifieldParser, QueryParser, SequencePlugin, PhrasePlugin
+from whoosh.qparser import MultifieldParser, QueryParser
 from whoosh.analysis import StemmingAnalyzer
-from whoosh.query import Phrase
 
 from main import models
+
+from datetime import datetime
 
 schema_anime = Schema(
     id=TEXT(stored=True),
@@ -30,15 +31,6 @@ def create_index():
     ix = create_in("index", schema_anime)
     writer = ix.writer()
     for anime in models.Anime.objects.all():
-
-        date_start = anime.date_start
-        date_end = anime.date_end
-
-        if date_start:
-            date_start = date_start.strftime("%Y-%m-%d")
-        if date_end:
-            date_end = date_end.strftime("%Y-%m-%d")
-
         writer.add_document(
             id=anime.id.__str__(),
             title=anime.title.lower(),
@@ -47,8 +39,8 @@ def create_index():
             type=anime.type.name.lower(),
             studios=','.join([studio.name.lower() for studio in anime.studios.all()]),
             genres=','.join([genre.name.lower() for genre in anime.genres.all()]),
-            date_start=date_start,
-            date_end=date_end,
+            date_start=anime.date_start.strftime("%Y%m%d") if anime.date_start else None,
+            date_end=anime.date_end.strftime("%Y%m%d") if anime.date_end else None,
         )
     writer.commit()
 
@@ -57,7 +49,7 @@ def general_search(query):
     ix = open_dir("index")
     with ix.searcher() as searcher:
         query = MultifieldParser(['title', 'synopsis', 'studios', 'genres'], ix.schema).parse(query.lower())
-        results = searcher.search(query)
+        results = searcher.search(query, limit=None)
         results = [models.Anime.objects.get(id=int(result['id'])) for result in results]
         return results
 
@@ -65,8 +57,54 @@ def general_search(query):
 def phrase_search(phrase):
     ix = open_dir("index")
     with ix.searcher() as searcher:
-        # phrase = [u'{}'.format(p) for p in phrase.lower().strip().split(' ')]
         query = QueryParser("synopsis", ix.schema).parse(phrase)
-        results = searcher.search(query)
+        results = searcher.search(query, limit=12)
+        results = [models.Anime.objects.get(id=int(result['id'])) for result in results]
+        return results
+
+
+def date_search(date_start=None, date_end=None):
+    ix = open_dir("index")
+
+    with ix.searcher() as searcher:
+
+        if not date_end:
+            date_start = datetime.strptime(date_start, "%Y-%m-%d").strftime("%Y%m%d")
+            query = QueryParser("date_start", ix.schema).parse(f'[{date_start} TO]')
+            results = searcher.search(query, limit=None)
+            results = [models.Anime.objects.get(id=int(result['id'])) for result in results]
+
+            results = sorted(results, key=lambda x: x.date_start)
+
+            return results
+        elif not date_start:
+            date_end = datetime.strptime(date_end, "%Y-%m-%d").strftime("%Y%m%d")
+            query = QueryParser("date_end", ix.schema).parse(f'[TO {date_end}]')
+            results = searcher.search(query, limit=None)
+            results = [models.Anime.objects.get(id=int(result['id'])) for result in results]
+
+            results = sorted(results, key=lambda x: x.date_end)
+
+            return results
+        else:
+            date_start = datetime.strptime(date_start, "%Y-%m-%d").strftime("%Y%m%d")
+            date_end = datetime.strptime(date_end, "%Y-%m-%d").strftime("%Y%m%d")
+            query = QueryParser("date_start", ix.schema).parse(f'[{date_start} TO {date_end}]')
+            query2 = QueryParser("date_end", ix.schema).parse(f'[{date_start} TO {date_end}]')
+            results = searcher.search(query, limit=None)
+            results = [models.Anime.objects.get(id=int(result['id'])) for result in results]
+            results2 = searcher.search(query2, limit=None)
+            results2 = [models.Anime.objects.get(id=int(result['id'])) for result in results2]
+
+            result = sorted(list(set(results).intersection(results2)), key=lambda x: x.date_start)
+
+            return result
+
+
+def episodes_search(number):
+    ix = open_dir("index")
+    with ix.searcher() as searcher:
+        query = QueryParser("episodes", ix.schema).parse(f'[{number} TO]')
+        results = searcher.search(query, limit=None)
         results = [models.Anime.objects.get(id=int(result['id'])) for result in results]
         return results

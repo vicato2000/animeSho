@@ -39,15 +39,16 @@
             </form>
         </div>
         <div id="dates" class="mt-5" style="display: none">
-            <form>
+            <form onsubmit="return validateFormsRadio('2')" method="post" action="{% url 'search' %}">
                 {% csrf_token %}
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-sizing-lg">Start Date</span>
-                    <input type="date" class="form-control" aria-label="Sizing example input"
+                    <input type="date" name="date_start" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-lg">
                     <span class="input-group-text" id="inputGroup-sizing-lg">End Date</span>
-                    <input type="date" class="form-control" aria-label="Sizing example input"
+                    <input type="date" name="date_end" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-lg">
+                    <input type="submit" class="btn btn-primary" value="Submit">
                 </div>
             </form>
         </div>

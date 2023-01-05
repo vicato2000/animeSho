@@ -67,9 +67,15 @@ def custom_search_view(request):
         return render(request, 'search.html')
     else:
         animes = []
+
         if 'phrase' in request.POST:
             phrase = request.POST.get('phrase')
             animes = whoosh.phrase_search(phrase)
+
+        if 'date_start' in request.POST:
+            date_start = request.POST.get('date_start')
+            date_end = request.POST.get('date_end')
+            animes = whoosh.date_search(date_start, date_end)
 
         return render(request, 'search.html', {'animes': animes})
 
