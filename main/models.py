@@ -52,3 +52,11 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Watchlist(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    anime = models.ForeignKey('Anime', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username + ' - ' + self.anime.title

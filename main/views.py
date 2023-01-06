@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from main import models
-from utils import load_db, whoosh
+from utils import load_db, whoosh, recomendations
 
 NUM_ANIMES_PER_PAGE = 36
 
@@ -86,7 +86,11 @@ def custom_search_view(request):
 
 def details(request, anime_id):
     anime = models.Anime.objects.get(id=anime_id)
-    return render(request, 'details.html', {'anime': anime})
+
+    animes = recomendations.get_recommendations(anime)
+
+    return render(request, 'details.html', {'anime': anime,
+                                            'animes': animes})
 
 
 def register(request):
