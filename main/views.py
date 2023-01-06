@@ -76,6 +76,10 @@ def custom_search_view(request):
             date_start = request.POST.get('date_start')
             date_end = request.POST.get('date_end')
             animes = whoosh.date_search(date_start, date_end)
+        if 'episodes' in request.POST:
+            episodes = request.POST.get('episodes')
+            operator = request.POST.get('operator')
+            animes = whoosh.episodes_search(episodes, operator)
 
         return render(request, 'search.html', {'animes': animes})
 

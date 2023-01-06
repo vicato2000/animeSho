@@ -101,10 +101,19 @@ def date_search(date_start=None, date_end=None):
             return result
 
 
-def episodes_search(number):
+def episodes_search(number, operator):
     ix = open_dir("index")
     with ix.searcher() as searcher:
-        query = QueryParser("episodes", ix.schema).parse(f'[{number} TO]')
+        if operator == 'g':
+            query = QueryParser("episodes", ix.schema).parse(f'[{number} TO]')
+        else:
+            query = QueryParser("episodes", ix.schema).parse(f'[TO {number}]')
         results = searcher.search(query, limit=None)
         results = [models.Anime.objects.get(id=int(result['id'])) for result in results]
+
+        if operator == 'g':
+            results = sorted(results, key=lambda x: x.episodes)
+        else:
+            results = sorted(results, key=lambda x: x.episodes, reverse=True)
+
         return results

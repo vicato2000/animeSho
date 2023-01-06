@@ -53,12 +53,26 @@
             </form>
         </div>
         <div id="episodes" class="mt-5" style="display: none">
-            <form>
+            <form method="post" action="{% url 'search' %}">
                 {% csrf_token %}
-                <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-sizing-lg">Similar or Equals Number of Episodes</span>
-                    <input type="number" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-lg">
+                <div class="row">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text" id="inputGroup-sizing-lg">Number of Episodes</span>
+                        <input type="number" name="episodes" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-lg" required>
+
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <label>
+                        <input type="radio" class="form-check-input" name="operator" value="g" required>
+                        Greater than
+                    </label>
+                    <label>
+                        <input type="radio" class="form-check-input" name="operator" value="s">
+                        Smaller than
+                    </label>
+
                 </div>
             </form>
         </div>
