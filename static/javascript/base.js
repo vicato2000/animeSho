@@ -88,6 +88,9 @@ function validateFormsRadio(value) {
     }
 }
 
+function see(animeId){
+
+}
 
 function validateSearchForm() {
     let form = document.getElementById("search-form");

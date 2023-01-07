@@ -96,7 +96,8 @@
                                         <a class="dropdown-item" href="{% url 'index' %}?order=episodes">Ascendente</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'index' %}?order=-episodes">Descendente</a>
+                                        <a class="dropdown-item"
+                                           href="{% url 'index' %}?order=-episodes">Descendente</a>
                                     </li>
                                 </ul>
                             </li>
@@ -104,9 +105,9 @@
                     </li>
                 {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'search' %}">Custom Search</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'search' %}">Custom Search</a>
+                </li>
 
                 <form id="search-form" class="d-flex justify-content-center ms-5" method="get"
                       action="{% url 'index' %}" onsubmit="return validateSearchForm()">
@@ -119,7 +120,16 @@
 
             <div class="d-flex">
                 {% if user.is_authenticated %}
-                    <a class="btn btn-light me-2" href="#">{{ user.username }}</a>
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            {{ user.username }}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'whatchlist' %}">Watchlist</a></li>
+                            <li><a class="dropdown-item" href="{% url 'watchlist_recommendations' %}">Recommendations</a></li>
+                        </ul>
+                    </div>
                     <a class="btn btn-outline-light" href="{% url 'logout' %}">Logout</a>
                 {% else %}
                     <button class="btn btn-outline-light me-2" type="button" data-bs-toggle="modal"

@@ -89,8 +89,64 @@ def details(request, anime_id):
 
     animes = recomendations.get_recommendations(anime)
 
+    watched = False
+
+    if request.user.is_authenticated:
+        watchlist = models.Watchlist.objects.filter(user=request.user).all()
+        if watchlist and anime.id in watchlist.values_list('anime', flat=True):
+            watched = True
+
     return render(request, 'details.html', {'anime': anime,
-                                            'animes': animes})
+                                            'animes': animes,
+                                            'watched': watched})
+
+
+def watchlist(request):
+    watchlist = models.Watchlist.objects.filter(user=request.user).values_list('anime', flat=True)
+
+    animes = models.Anime.objects.filter(id__in=watchlist)
+
+    paginator = Paginator(animes, NUM_ANIMES_PER_PAGE)
+
+    if 'page' in request.GET:
+        page_number = request.GET.get('page')
+    else:
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'watchlist.html', {'animes': page_obj,
+                                              'max_pages': [i for i in range(1, page_obj.paginator.num_pages + 1)],
+                                              'pagination': True})
+
+def recomendations_whatchlist(request):
+    animes = recomendations.get_recommendations_watchlist(request.user)
+
+    paginator = Paginator(animes, NUM_ANIMES_PER_PAGE)
+
+    if 'page' in request.GET:
+        page_number = request.GET.get('page')
+    else:
+        page_number = 1
+
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'watchlist.html', {'animes': page_obj,
+                                              'max_pages': [i for i in range(1, page_obj.paginator.num_pages + 1)],
+                                              'pagination': False})
+
+
+def add_remove_anime_whatchlist(request, anime_id):
+    anime = models.Anime.objects.get(id=anime_id)
+
+    watchlist = models.Watchlist.objects.filter(user=request.user, anime=anime).exists()
+
+    if watchlist:
+        models.Watchlist.objects.filter(user=request.user, anime=anime).delete()
+        return HttpResponse('removed')
+    else:
+        models.Watchlist.objects.create(user=request.user, anime=anime)
+        return HttpResponse('added')
 
 
 def register(request):

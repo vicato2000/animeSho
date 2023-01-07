@@ -61,6 +61,7 @@ def complete_anime_info(anime: scraping.Anime):
 
 
 def delete_all():
+    models.Watchlist.objects.all().delete()
     models.Anime.objects.all().delete()
     models.Type.objects.all().delete()
     models.Status.objects.all().delete()

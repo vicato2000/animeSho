@@ -39,6 +39,26 @@
                         - {% endif %}</p>
                     <p class="anime-dates ms-2">End date: {% if anime.date_end %} {{ anime.date_end }} {% else %}
                         - {% endif %}</p>
+                    {% if user.is_authenticated %}
+
+                        <p id="no-watch" class="ms-2 mb-2" style="display: none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                                 class="bi bi-0-circle" viewBox="0 0 16 16" onclick="changedWatched()">
+                                <path d="M7.988 12.158c-1.851 0-2.941-1.57-2.941-3.99V7.84c0-2.408 1.101-3.996 2.965-3.996 1.857 0 2.935 1.57 2.935 3.996v.328c0 2.408-1.101 3.99-2.959 3.99ZM8 4.951c-1.008 0-1.629 1.09-1.629 2.895v.31c0 1.81.627 2.895 1.629 2.895s1.623-1.09 1.623-2.895v-.31c0-1.8-.621-2.895-1.623-2.895Z"/>
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Z"/>
+                            </svg>
+                            To see
+                        </p>
+
+                        <p id="watch" class="ms-2 mb-2" style="display: none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                             class="bi bi-0-circle-fill" viewBox="0 0 16 16" onclick="changedWatched()">
+                            <path d="M8 4.951c-1.008 0-1.629 1.09-1.629 2.895v.31c0 1.81.627 2.895 1.629 2.895s1.623-1.09 1.623-2.895v-.31c0-1.8-.621-2.895-1.623-2.895Z"/>
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Zm-8.012 4.158c1.858 0 2.96-1.582 2.96-3.99V7.84c0-2.426-1.079-3.996-2.936-3.996-1.864 0-2.965 1.588-2.965 3.996v.328c0 2.42 1.09 3.99 2.941 3.99Z"/>
+                        </svg>
+                        Watched
+
+                    {% endif %}
 
                 </div>
 
@@ -76,5 +96,45 @@
         </div>
 
     </div>
+
+    <script>
+        function preWatched() {
+            if ('{{ watched }}' === 'True') {
+                document.getElementById("watch").style.display = "block";
+            } else {
+                document.getElementById("no-watch").style.display = "block";
+            }
+        }
+
+        function changedWatched() {
+
+            async function change() {
+                const response = await fetch('{% url 'add_remove_anime_whatchlist' anime.id %}', {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url// body data type must match "Content-Type" header
+                },);
+            }
+
+            if (document.getElementById("watch").style.display === "block") {
+
+                change();
+
+                document.getElementById("watch").style.display = "none";
+                document.getElementById("no-watch").style.display = "block";
+            } else {
+
+                change();
+
+                document.getElementById("watch").style.display = "block";
+                document.getElementById("no-watch").style.display = "none";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", preWatched);
+    </script>
 
 {% endblock %}

@@ -26,4 +26,7 @@ urlpatterns = [
     path('load/', views.load_db_whoosh, name='load'),
     path('<int:anime_id>/', views.details, name='anime_detail'),
     path('search/', views.custom_search_view, name='search'),
+    path('whatchlist/add-remove/<int:anime_id>/', views.add_remove_anime_whatchlist, name='add_remove_anime_whatchlist'),
+    path('whatchlist/', views.watchlist, name='whatchlist'),
+    path('watchlist/recommendations/', views.recomendations_whatchlist, name='watchlist_recommendations'),
 ]
