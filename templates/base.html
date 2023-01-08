@@ -33,12 +33,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Acciones
+                            Actions
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" onclick=" loadAnimes()" href="#">Cargar la base de datos</a>
-                            </li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" onclick=" loadAnimes()" href="#">Load the database</a></li>
                         </ul>
                     </li>
 
@@ -51,41 +49,41 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Filtros
+                            Order by
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li>
                                 <a class="dropdown-item">Ranking</a>
                                 <ul class="dropdown-menu dropdown-submenu">
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'index' %}?order=rank">Ascendente</a>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=rank">Upward</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'index' %}?order=-rank">Descendente</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="dropdown-item">Popularidad</a>
-                                <ul class="dropdown-menu dropdown-submenu">
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="{% url 'index' %}?order=popularity">Ascendente</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="{% url 'index' %}?order=-popularity">Descendente</a>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=-rank">Downward</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
-                                <a class="dropdown-item">Puntuación</a>
+                                <a class="dropdown-item">Popularity</a>
                                 <ul class="dropdown-menu dropdown-submenu">
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'index' %}?order=score">Ascendente</a>
+                                        <a class="dropdown-item"
+                                           href="{% url 'index' %}?order=popularity">Upward</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'index' %}?order=-score">Descendente</a>
+                                        <a class="dropdown-item"
+                                           href="{% url 'index' %}?order=-popularity">Downward</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="dropdown-item">Score</a>
+                                <ul class="dropdown-menu dropdown-submenu">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=score">Upward</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=-score">Downward</a>
                                     </li>
                                 </ul>
                             </li>
@@ -93,11 +91,11 @@
                                 <a class="dropdown-item">Episodes</a>
                                 <ul class="dropdown-menu dropdown-submenu">
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'index' %}?order=episodes">Ascendente</a>
+                                        <a class="dropdown-item" href="{% url 'index' %}?order=episodes">Upward</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item"
-                                           href="{% url 'index' %}?order=-episodes">Descendente</a>
+                                           href="{% url 'index' %}?order=-episodes">Downward</a>
                                     </li>
                                 </ul>
                             </li>
@@ -133,10 +131,10 @@
                     <a class="btn btn-outline-light" href="{% url 'logout' %}">Logout</a>
                 {% else %}
                     <button class="btn btn-outline-light me-2" type="button" data-bs-toggle="modal"
-                            data-bs-target="#login-modal">Iniciar Sesión
+                            data-bs-target="#login-modal">Login
                     </button>
-                    <button class="btn btn-light me-2" ype="button" data-bs-toggle="modal"
-                            data-bs-target="#register-modal">Registrarse
+                    <button class="btn btn-light me-2" type="button" data-bs-toggle="modal"
+                            data-bs-target="#register-modal">Register
                     </button>
                 {% endif %}
 
@@ -170,7 +168,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="login-modal-label">Inicio de sesión</h1>
+                <h1 class="modal-title fs-5" id="login-modal-label">Login</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -182,7 +180,7 @@
                                aria-describedby="usernameHelp" required>
                     </div>
                     <div class="mb-3">
-                        <label for="inputPassword1" class="form-label">Contraseña</label>
+                        <label for="inputPassword1" class="form-label">Password</label>
                         <input type="password" name="password" class="form-control" id="inputPassword" required>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Submit">
@@ -197,7 +195,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="register-modal-label">Registro</h1>
+                <h1 class="modal-title fs-5" id="register-modal-label">Register</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -213,33 +211,33 @@
                         <div class="invalid-feedback" id="invalidEmail"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="inputPassword" class="form-label">Contraseña</label>
+                        <label for="inputPassword" class="form-label">Password</label>
                         <input type="password" name="password" class="form-control" id="inputPassword"
                                minlength="8" required>
                         <div class="invalid-feedback" id="invalidContraseña"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="inputPassword2" class="form-label">Repita contraseña</label>
+                        <label for="inputPassword2" class="form-label">Repeat password</label>
                         <input type="password" name="password2" class="form-control" id="inputPassword2"
                                minlength="8" required>
                         <div class="invalid-feedback" id="invalidContraseña"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="inputUsername" class="form-label">Nombre de usuario</label>
+                        <label for="inputUsername" class="form-label">Username</label>
                         <input type="text" name="username" class="form-control" id="inputUsername"
                                 {% if are_errors %} value="{{ username }}" {% endif %}
                                required>
                         <div class="invalid-feedback" id="invalidUsername"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="inputFirstName" class="form-label">Nombre</label>
+                        <label for="inputFirstName" class="form-label">Name</label>
                         <input type="text" name="first_name" class="form-control" id="inputFirstName"
                                 {% if are_errors %} value="{{ first_name }}" {% endif %}
                                required>
                         <div class="invalid-feedback" id="invalidFirstName"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="inputLastName" class="form-label">Apellido(s)</label>
+                        <label for="inputLastName" class="form-label">Last Name</label>
                         <input type="text" name="last_name" class="form-control" id="inputLastName"
                                 {% if are_errors %} value="last_name" {% endif %}
                                required>

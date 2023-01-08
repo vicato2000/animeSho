@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+
+{% endblock %}
 
 {% block content %}
 
     <div class="container">
         <fieldset class="mt-5">
-            <label>How dou you want search?</label>
+            <label id="label">How do you want to search?</label>
             <div class="form-check">
                 <input value="1" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
                        checked onchange="radioButtons(this.value)">
                 <label class="form-check-label" for="flexRadioDefault1">
-                    Phrases in synopsys
+                    In synopsys
                 </label>
             </div>
             <div class="form-check">
@@ -32,9 +39,10 @@
             <form onsubmit="return validateFormsRadio('1')" method="post" action="{% url 'search' %}">
                 <div class="input-group input-group-lg">
                     {% csrf_token %}
-                    <span class="input-group-text" id="inputGroup-sizing-lg">Phrase</span>
+                    <span class="input-group-text" id="inputGroup-sizing-lg">Synopsys</span>
                     <input type="text" name="phrase" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-lg">
+                    <input type="submit" class="btn btn-primary" value="Submit">
                 </div>
             </form>
         </div>
@@ -60,6 +68,7 @@
                         <span class="input-group-text" id="inputGroup-sizing-lg">Number of Episodes</span>
                         <input type="number" name="episodes" class="form-control" aria-label="Sizing example input"
                                aria-describedby="inputGroup-sizing-lg" required>
+                        <input type="submit" class="btn btn-primary" value="Submit">
 
                     </div>
                 </div>

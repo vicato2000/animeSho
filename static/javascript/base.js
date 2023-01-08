@@ -4,7 +4,7 @@ function validateLoginForm() {
     let password = form.password.value;
 
     if (username.trim().length === 0 || password.trim().length === 0) {
-        alert("No introdujo usuario o contraseña");
+        alert("Did not enter username or password.");
         return false;
     }
 }
@@ -20,23 +20,23 @@ function validateRegisterForm() {
     let lastname = form.last_name.value;
 
     if (username.trim().length === 0 || password.trim().length === 0 || password2.trim().length === 0 || email.trim().length === 0 || name.trim().length === 0 || lastname.trim().length === 0) {
-        alert("Debe de completar todos los campos");
+        alert("You must complete all fields.");
         return false;
     }
 
     if (password !== password2) {
-        alert("Las contraseñas no coinciden");
+        alert("Passwords do not match.");
         return false;
     }
 
 
     if (name.trim()[0] !== name.trim()[0].toUpperCase()) {
-        alert("El nombre debe de iniciar con mayúscula");
+        alert("The name must start with a capital letter.");
         return false;
     }
 
     if (lastname.trim()[0] !== lastname.trim()[0].toUpperCase()) {
-        alert("El apellido debe de iniciar con mayúscula");
+        alert("Last name must start with a capital letter.");
         return false;
     }
 
@@ -70,7 +70,7 @@ function validateFormsRadio(value) {
         let phrase = form.phrase.value;
 
         if (phrase.trim().length === 0) {
-            alert("No introdujo frase");
+            alert("He did not enter a phrase");
             return false;
         }
     } else if (value === "2") {
@@ -80,7 +80,7 @@ function validateFormsRadio(value) {
 
         if (date_e && date_s) {
             if (date_e < date_s) {
-                alert("La fecha final debe de ser mayor a la fecha inicial");
+                alert("The end date must be greater than the start date");
                 return false;
             }
         }
@@ -104,7 +104,7 @@ function validateSearchForm() {
 
 async function loadAnimes() {
 
-    let dialog = confirm("¿Desea cargar los animes? Este procesa tarda entre 1 y 5 minutos dependiendo de la conexión a internet");
+    let dialog = confirm("¿Do you want to load all 1000 animes? This process takes between 1 and 5 minutes depending on the internet connection");
 
     if (dialog) {
 
@@ -123,10 +123,10 @@ async function loadAnimes() {
 
 
         if (response.ok) {
-            alert("Los animes se han cargado correctamente");
+            alert("The animes have been loaded successfully");
             window.location.href = '';
         } else {
-            alert("Error al cargar los animes");
+            alert("Error loading anime");
             window.location.href = '';
         }
     }
@@ -145,12 +145,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let navbar_height;
         if (window.scrollY > 50) {
             document.getElementById('navbar-top').classList.add('fixed-top');
-            // add padding top to show content behind navbar
             navbar_height = document.querySelector('.navbar').offsetHeight;
             document.body.style.paddingTop = navbar_height + 'px';
         } else {
             document.getElementById('navbar-top').classList.remove('fixed-top');
-            // remove padding top from body
             document.body.style.paddingTop = '0';
         }
     });

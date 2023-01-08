@@ -49,6 +49,7 @@ def save_anime(anime: scraping.Anime):
 
 
 def complete_anime_info(anime: scraping.Anime):
+    print(anime.title)
     a = models.Anime.objects.get(title=anime.title, rank=anime.rank)
 
     studios = models.Studio.objects.filter(name__in=anime.studios)
